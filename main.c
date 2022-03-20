@@ -15,6 +15,7 @@ typedef struct blockers{
 Rectangle rec = {
     .width = 139,
     .height = 30,
+    .y = 30
     
 };
 Rectangle player = {
@@ -31,11 +32,12 @@ Rectangle ball = {
 };
 blockers blocks[5][10];
 int main(void){
+    bool pause = false;
     InitWindow(width,height,"Atari Breakout");
     SetTargetFPS(60);
     
     for(int y = 0; y < 5;y++){
-    
+       
         for(int x = 0; x < 10; x++){
 
         switch (y){
@@ -58,13 +60,12 @@ int main(void){
                 break;
             }
 
-            if(y == 0)  
-                rec.y = 30;
+            
             if(x == 0){
                 rec.x = 10;
                 
             }else{
-                rec.x = rec.x + rec.width + 10;
+                rec.x += rec.width + 10;
                 
             }
             
@@ -72,22 +73,35 @@ int main(void){
             blocks[y][x].state = true;
         
         }
-        rec.y = rec.y + rec.height + 10;
+        rec.y += rec.height + 10;
     }
     
     while (!WindowShouldClose()){
 
-        if(IsKeyDown(KEY_A))
-            if(player.x > 0)
-                player.x -= PlayerSpeed;
-        if(IsKeyDown(KEY_D))
-            if(player.x + player.width < width)
-                player.x += PlayerSpeed;        
+
+        if(IsKeyPressed(KEY_P)){
+
+            if(pause)
+                pause = false;
+            else
+                pause = true;
+        }
+        if(!pause){
+            if(IsKeyDown(KEY_A))
+                if(player.x > 0)
+                    player.x -= PlayerSpeed;
+            if(IsKeyDown(KEY_D))
+                if(player.x + player.width < width)
+                    player.x += PlayerSpeed;
+        }            
+            
+
+
         BeginDrawing();
+
         ClearBackground(BLACK);
-        
         DrawFPS(50,800);
-       
+
         for(int y = 0; y < 5;y++){
             for(int x = 0 ; x < 10; x++){
                 if(blocks[y][x].state == true)
@@ -96,6 +110,9 @@ int main(void){
         }
         DrawRectangle(ball.x,ball.y,ball.width,ball.height,RAYWHITE);
         DrawRectangle(player.x,player.y,player.width,player.height,RAYWHITE);
+        if(pause){
+            DrawText("PAUSED",300,400,40,WHITE);
+        }
         EndDrawing();
     }
 
