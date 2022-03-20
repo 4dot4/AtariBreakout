@@ -13,7 +13,7 @@ typedef struct blockers{
 }blockers;
 
 Rectangle rec = {
-    .width = 138,
+    .width = 139,
     .height = 30,
     
 };
@@ -31,7 +31,7 @@ Rectangle ball = {
 };
 blockers blocks[5][10];
 int main(void){
-    InitWindow(width,height,"Atari Breackout");
+    InitWindow(width,height,"Atari Breakout");
     SetTargetFPS(60);
     
     for(int y = 0; y < 5;y++){
