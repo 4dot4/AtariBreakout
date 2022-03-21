@@ -1,4 +1,5 @@
 #include "raylib.h"
+#include "components.h"
 #include <stdio.h>
 #include <stdint.h>
 const int height = 900;
@@ -6,11 +7,6 @@ const int width = 1500;
 const int PlayerSpeed = 10;
 int ballXspeed = 10;
 int ballYspeed = 10;
-typedef struct blockers{
-    Rectangle spec;
-    bool state;
-    Color blockColor;
-}blockers;
 
 Rectangle rec = {
     .width = 139,
@@ -24,14 +20,30 @@ Rectangle player = {
     .y = 850,
     .x = 400 - 150 / 2
 };
-Rectangle ball = {
+Rectangle ballspecs = {
     .width = 10,
     .height = 10,
     .y = 450,
     .x = 750
 };
+
+
+
+
+
+
 blockers blocks[5][10];
+void pysic(Rectangle player, CompleteBall* ball,blockers* blocks){
+
+}
 int main(void){
+
+    CompleteBall ball = {
+        .ballCords = ballspecs,
+        .spdX = 10,
+        .spdY = 10 
+    };
+
     bool pause = false;
     InitWindow(width,height,"Atari Breakout");
     SetTargetFPS(60);
@@ -93,6 +105,7 @@ int main(void){
             if(IsKeyDown(KEY_D))
                 if(player.x + player.width < width)
                     player.x += PlayerSpeed;
+            pysic(player,&ball,blocks);
         }            
             
 
@@ -108,10 +121,10 @@ int main(void){
                     DrawRectangle(blocks[y][x].spec.x,blocks[y][x].spec.y,blocks[y][x].spec.width,blocks[y][x].spec.height,blocks[y][x].blockColor);
             }
         }
-        DrawRectangle(ball.x,ball.y,ball.width,ball.height,RAYWHITE);
+        DrawRectangle(ball.ballCords.x,ball.ballCords.y,ball.ballCords.width,ball.ballCords.height,RAYWHITE);
         DrawRectangle(player.x,player.y,player.width,player.height,RAYWHITE);
         if(pause){
-            DrawText("PAUSED",300,400,40,WHITE);
+            DrawText("PAUSED",700,450,40,WHITE);
         }
         EndDrawing();
     }
