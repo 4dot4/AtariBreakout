@@ -10,3 +10,12 @@ typedef struct CompleteBall{
     float spdX;
     float spdY;
 }CompleteBall;
+
+typedef enum collison {
+    nada = 0,
+    cima,
+    baixo,
+    esquerda,
+    direita,
+    
+}typeCollision;

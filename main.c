@@ -16,7 +16,7 @@ Rectangle rec = {
 };
 Rectangle player = {
     .width = 150,
-    .height = 20,
+    .height = 50,
     .y = 850,
     .x = 400 - 150 / 2
 };
@@ -33,54 +33,76 @@ Rectangle ballspecs = {
 
 
 blockers blocks[5][10];
-// bool colideX(Rectangle rect1, Rectangle rect2){
-//     if( rect1.x == rect2.x + rect2.width  && 
-//         rect1.y <= rect2.y + rect2.height &&
-//          rect1.y + rect1.height >= rect2.y
-//         )
-//         return true;
-//     return false;    
-// }
-bool colideY(Rectangle rect1, Rectangle rect2){
-    if( rect1.y + rect1.height == rect2.y &&
-        rect1.x <= rect2.x + rect2.width  &&
-        rect1.x + rect1.width >= rect2.x)
-        return true;
-    else if(rect1.y  == rect2.y + rect2.height &&
-            rect1.x <= rect2.x + rect2.width  &&
-            rect1.x + rect1.width >= rect2.x)
-        return true;
-    return false;    
+typeCollision colide(Rectangle ball, Rectangle rect){
+    if( ball.x + ball.width  >= rect.x){
+        if( ball.x  < rect.x &&
+            ball.y + ball.height > rect.y &&
+            ball.y < rect.y + rect.height )
+            return esquerda;
+    }
+    else if(ball.x  <= rect.x + rect.width) {
+        if( ball.x  + ball.width > rect.x + rect.width&&
+            ball.y  + ball.height > rect.y &&
+            ball.y  < rect.y + rect.height  ) return direita;
+    }
+    else if(ball.y + ball.height >= rect.y){
+        if( ball.y < rect.y &&
+            ball.x + ball.width > rect.x &&
+            ball.x < rect.x + rect.width )
+            return cima;
+    }
+        
+    else if(ball.y <= rect.y + rect.height){
+        if( ball.y + ball.height > rect.y + rect.height &&
+            ball.x + ball.width > rect.x &&
+            ball.x < rect.x + rect.width  )
+            return baixo;   
+    }
+        
+    return nada;
+
 }
+
 void pysic(Rectangle player, CompleteBall* ball,blockers blocks[5][10],int lifes){
     
-     
-    ball->ballCords.x += ball->spdX;   
-    ball->ballCords.x + ball->ballCords.width == width || ball->ballCords.x == 0? ball->spdX = -ball->spdX : 0;
+    
+    
+
+    ball->ballCords.y + ball->ballCords.height >= height || ball->ballCords.y <= 0? ball->spdY = -ball->spdY : 0;
+    ball->ballCords.x + ball->ballCords.width >= width || ball->ballCords.x <= 0? ball->spdX = -ball->spdX : 0;
+    ball->ballCords.x += ball->spdX;  
     ball->ballCords.y += ball->spdY;
-    ball->ballCords.y + ball->ballCords.height == height || ball->ballCords.y == 0? ball->spdY = -ball->spdY : 0;
-    // if(colideX(ball->ballCords,player))
-    //     ball->spdX = -ball->spdX;
-    if(colideY(ball->ballCords,player))
-        ball->spdY = -ball->spdY;
+    
+    if(colide(ball->ballCords,player) == direita || colide(ball->ballCords,player) == esquerda)
+        ball->spdX = -ball->spdX;
+    else if(colide(ball->ballCords,player)== cima || colide(ball->ballCords,player) == baixo)
+        ball->spdY = -ball->spdY;    
+   
+     
     for(int y = 0; y < 5; y++){
         for(int x = 0; x < 10; x++){
             if(blocks[y][x].state == true){
-              if(colideY(ball->ballCords,blocks[y][x].spec)){
+                //collision of blocks (ball[y][x].spec) it's the rectangle
+                if(colide(ball->ballCords,blocks[y][x].spec) == cima ||colide(ball->ballCords,blocks[y][x].spec) == baixo){
+                    
                     blocks[y][x].state = false;
                     ball->spdY = -ball->spdY;
-                }  
+                }else if(colide(ball->ballCords,blocks[y][x].spec) == esquerda ||colide(ball->ballCords,blocks[y][x].spec) == direita){
+                    blocks[y][x].state = false;
+                    ball->spdX = -ball->spdX;
+                }
+
             }
-            
         }
     }
 }
 int main(void){
 
+   
     CompleteBall ball = {
         .ballCords = ballspecs,
-        .spdX = 10,
-        .spdY = 10 
+        .spdX = ballXspeed,
+        .spdY = ballYspeed 
     };
     char outputStr[5];
 
@@ -121,7 +143,7 @@ int main(void){
                 
             }
             
-            blocks[y][x].spec = rec;
+            blocks[y][x].spec = rec;    
             blocks[y][x].state = true;
         
         }
@@ -138,6 +160,7 @@ int main(void){
             else
                 pause = true;
         }
+       
         if(!pause){
             if(IsKeyDown(KEY_A))
                 if(player.x > 0)
@@ -145,6 +168,8 @@ int main(void){
             if(IsKeyDown(KEY_D))
                 if(player.x + player.width < width)
                     player.x += PlayerSpeed;
+           
+                    
             pysic(player,&ball,blocks,lifes);
         }            
             
