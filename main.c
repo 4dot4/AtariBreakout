@@ -39,6 +39,7 @@ typeCollision colide(Rectangle rect1, Rectangle rect2){
         if (rect1.x < rect2.x &&
             rect1.y + rect1.height > rect2.y &&
             rect1.y < rect2.y + rect2.height){
+                
                 return direita;
             }            
     }
@@ -46,6 +47,7 @@ typeCollision colide(Rectangle rect1, Rectangle rect2){
         if( rect1.x + rect1.width > rect2.x + rect2.width&&
             rect1.y + rect1.height > rect2.y &&
             rect1.y < rect2.y + rect2.height){
+                
                 return esquerda;
             }
     }
@@ -53,13 +55,15 @@ typeCollision colide(Rectangle rect1, Rectangle rect2){
         if( rect1.x + rect1.width >= rect2.x &&
             rect1.x <= rect2.x + rect2.width &&
             rect1.y < rect2.y){
+           
                 return baixo;
             }
     }
-    if(rect1.y <= rect2.y + rect2.width){
+    if(rect1.y <= rect2.y + rect2.height){
         if( rect1.x + rect1.width >= rect2.x &&
             rect1.x <= rect2.x + rect2.width &&
             rect1.y + rect1.height > rect2.y + rect2.height){
+               
                 return cima;
             }
     }
@@ -87,11 +91,12 @@ void pysic(Rectangle player, CompleteBall* ball,blockers blocks[5][10],int lifes
         for(int x = 0; x < 10; x++){
             if(blocks[y][x].state == true){
                 //collision of blocks (ball[y][x].spec) it's the rectangle
-                if(colide(ball->ballCords,blocks[y][x].spec) == cima ||colide(ball->ballCords,blocks[y][x].spec) == baixo){
+                if(colide(ball->ballCords,blocks[y][x].spec) == cima || colide(ball->ballCords,blocks[y][x].spec) == baixo){
                     
                     blocks[y][x].state = false;
                     ball->spdY = -ball->spdY;
-                }else if(colide(ball->ballCords,blocks[y][x].spec) == esquerda ||colide(ball->ballCords,blocks[y][x].spec) == direita){
+                }
+                else if(colide(ball->ballCords,blocks[y][x].spec) == esquerda || colide(ball->ballCords,blocks[y][x].spec) == direita){
                     blocks[y][x].state = false;
                     ball->spdX = -ball->spdX;
                 }
@@ -152,7 +157,7 @@ int main(void){
         
         }
         rec.y += rec.height + 10;
-    }
+    }   
     
     while (!WindowShouldClose()){
 
