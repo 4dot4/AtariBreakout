@@ -33,34 +33,38 @@ Rectangle ballspecs = {
 
 
 blockers blocks[5][10];
-typeCollision colide(Rectangle ball, Rectangle rect){
-    if( ball.x + ball.width  >= rect.x){
-        if( ball.x  < rect.x &&
-            ball.y + ball.height > rect.y &&
-            ball.y < rect.y + rect.height )
-            return esquerda;
-    }
-    else if(ball.x  <= rect.x + rect.width) {
-        if( ball.x  + ball.width > rect.x + rect.width&&
-            ball.y  + ball.height > rect.y &&
-            ball.y  < rect.y + rect.height  ) return direita;
-    }
-    else if(ball.y + ball.height >= rect.y){
-        if( ball.y < rect.y &&
-            ball.x + ball.width > rect.x &&
-            ball.x < rect.x + rect.width )
-            return cima;
-    }
-        
-    else if(ball.y <= rect.y + rect.height){
-        if( ball.y + ball.height > rect.y + rect.height &&
-            ball.x + ball.width > rect.x &&
-            ball.x < rect.x + rect.width  )
-            return baixo;   
-    }
-        
-    return nada;
+typeCollision colide(Rectangle rect1, Rectangle rect2){
 
+    if(rect1.x + rect1.width >= rect2.x){
+        if (rect1.x < rect2.x &&
+            rect1.y + rect1.height > rect2.y &&
+            rect1.y < rect2.y + rect2.height){
+                return direita;
+            }            
+    }
+    if (rect1.x <= rect2.x + rect2.width){
+        if( rect1.x + rect1.width > rect2.x + rect2.width&&
+            rect1.y + rect1.height > rect2.y &&
+            rect1.y < rect2.y + rect2.height){
+                return esquerda;
+            }
+    }
+    if(rect1.y + rect1.height >= rect2.y){
+        if( rect1.x + rect1.width >= rect2.x &&
+            rect1.x <= rect2.x + rect2.width &&
+            rect1.y < rect2.y){
+                return baixo;
+            }
+    }
+    if(rect1.y <= rect2.y + rect2.width){
+        if( rect1.x + rect1.width >= rect2.x &&
+            rect1.x <= rect2.x + rect2.width &&
+            rect1.y + rect1.height > rect2.y + rect2.height){
+                return cima;
+            }
+    }
+    return nada;
+        
 }
 
 void pysic(Rectangle player, CompleteBall* ball,blockers blocks[5][10],int lifes){
