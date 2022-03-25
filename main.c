@@ -4,7 +4,7 @@
 #include <stdlib.h>
 const int height = 900;
 const int width = 1500;
-const int PlayerSpeed = 10;
+const int PlayerSpeed = 15;
 int ballXspeed = 10;
 int ballYspeed = 10;
 int lifes = 5;
@@ -16,7 +16,7 @@ Rectangle rec = {
 };
 Rectangle player = {
     .width = 150,
-    .height = 50,
+    .height = 20,
     .y = 850,
     .x = 400 - 150 / 2
 };

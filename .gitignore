@@ -1,3 +1,4 @@
 *.exe/
 include/
 lib/
+.vscode/
