@@ -108,8 +108,7 @@ void pysic(Rectangle player, CompleteBall* ball,blockers blocks[5][10],int lifes
     }
 }
 void restart(){
-    for(int y = 0; y < 5;y++){
-       
+    for(int y = 0; y < 5;y++){   
         for(int x = 0; x < 10; x++){
 
         switch (y){
