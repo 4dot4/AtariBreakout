@@ -7,7 +7,7 @@ const int width = 1500;
 const int PlayerSpeed = 15;
 int score  = 0;
 int ballXspeed = 10;
-int ballYspeed = 10;
+int ballYspeed = -10;
 int lifes = 5;
 Rectangle rec = {
     .width = 139,
@@ -24,7 +24,7 @@ Rectangle player = {
 Rectangle ballspecs = {
     .width = 10,
     .height = 10,
-    .y = 450,
+    .y = 750,
     .x = 750
 };
 
@@ -163,6 +163,7 @@ int main(void){
 
     bool pause = false;
     InitWindow(width,height,"Atari Breakout");
+    InitAudioDevice();
     SetTargetFPS(60);
     
     restart();
@@ -172,7 +173,7 @@ int main(void){
 
         if(IsKeyPressed(KEY_P)){
             
-            lifes--;
+            
             if(pause)
                 pause = false;
             else
@@ -193,7 +194,7 @@ int main(void){
             
         if(lifes < 3)
             lifeColor = RED;
-            
+
         itoa(lifes,lifesStr,10); 
         itoa(score,scoreStr,10);
         BeginDrawing();
@@ -217,6 +218,6 @@ int main(void){
         }
         EndDrawing();
     }
-
-        CloseWindow();
+    CloseAudioDevice();
+    CloseWindow();
 }
