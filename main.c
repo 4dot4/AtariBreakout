@@ -8,9 +8,9 @@ const int PlayerSpeed = 15;
 int score  = 0;
 int ballXspeed = 10;
 int ballYspeed = -10;
-int lifes = 5;
+
 unsigned char canceled = 0;
-int nivel = 1;
+int nivel = 5;
 Rectangle rec = {
     .width = 139,
     .height = 30,
@@ -30,13 +30,13 @@ Rectangle ballspecs = {
     .x = 750
 };
 
-
-
-
-
-
 blockers blocks[5][10];
-
+void restartBall(CompleteBall* ball){
+    ball->ballCords.x = 750;
+    ball->ballCords.y = 750;
+    ball->spdX = 10;
+    ball->spdY = -10;
+}
 typeCollision colide(Rectangle rect1, Rectangle rect2){
 
     if(rect1.x + rect1.width >= rect2.x){
@@ -75,16 +75,20 @@ typeCollision colide(Rectangle rect1, Rectangle rect2){
         
 }
 
-void pysic(Rectangle player, CompleteBall* ball,blockers blocks[5][10],int lifes){
+void pysic(Rectangle player, CompleteBall* ball,blockers blocks[5][10],int* lifes){
     
     
     
 
-    ball->ballCords.y + ball->ballCords.height >= height || ball->ballCords.y <= 0? ball->spdY = -ball->spdY : 0;
+    ball->ballCords.y <= 0? ball->spdY = -ball->spdY : 0;
     ball->ballCords.x + ball->ballCords.width >= width || ball->ballCords.x <= 0? ball->spdX = -ball->spdX : 0;
     ball->ballCords.x += ball->spdX;  
     ball->ballCords.y += ball->spdY;
-    
+    if(ball->ballCords.y > height){
+        *lifes -= 1;
+        restartBall(ball);
+    }
+
     if(colide(ball->ballCords,player) == direita || colide(ball->ballCords,player) == esquerda)
         ball->spdX = -ball->spdX;
     else if(colide(ball->ballCords,player)== cima || colide(ball->ballCords,player) == baixo)
@@ -96,7 +100,7 @@ void pysic(Rectangle player, CompleteBall* ball,blockers blocks[5][10],int lifes
             if(blocks[y][x].state == true){
                 //collision of blocks (ball[y][x].spec) it's the rectangle
                 if(colide(ball->ballCords,blocks[y][x].spec) == cima || colide(ball->ballCords,blocks[y][x].spec) == baixo){
-                    score += 100;
+                    score += 10;
                     canceled++;                    
                     blocks[y][x].state = false;
                     ball->spdY = -ball->spdY;
@@ -105,23 +109,18 @@ void pysic(Rectangle player, CompleteBall* ball,blockers blocks[5][10],int lifes
                     blocks[y][x].state = false;
                     canceled++;
                     ball->spdX = -ball->spdX;
-                    score += 100;
+                    score += 10;
                 }
 
             }
         }
     }
 }
-void restartBall(CompleteBall* ball){
-    ball->ballCords.x = 750;
-    ball->ballCords.y = 750;
-    ball->spdX = 10;
-    ball->spdY = -10;
-}
+
 void restartBlocks(){
 
   
-    lifes = 5;
+    
     canceled = 0;
     rec.y = 30;
     Color levels[6][5] = {
@@ -174,7 +173,7 @@ void restartBlocks(){
 }
 int main(void){
 
-    
+    int lifes = 5;
     CompleteBall ball = {
         .ballCords = ballspecs,
         .spdX = ballXspeed,
@@ -214,7 +213,7 @@ int main(void){
                     player.x += PlayerSpeed;
             if(lifes > 0){
                 if(canceled != 50)
-                    pysic(player,&ball,blocks,lifes);
+                    pysic(player,&ball,blocks,&lifes);
                 else{
                     nivel = GetRandomValue(0,5);    
                     restartBlocks();
@@ -234,21 +233,27 @@ int main(void){
 
         ClearBackground(BLACK);
         
-           
-        for(int y = 0; y < 5;y++){
+        if(lifes < 0){
+          for(int y = 0; y < 5;y++){
             for(int x = 0 ; x < 10; x++){
                 if(blocks[y][x].state == true)
                     DrawRectangle(blocks[y][x].spec.x,blocks[y][x].spec.y,blocks[y][x].spec.width,blocks[y][x].spec.height,blocks[y][x].blockColor);
+                }
             }
+            DrawText("Score:",1200,800,40,RAYWHITE);
+            DrawText(scoreStr,1350,800,40,RAYWHITE);
+            DrawText(lifesStr,50,800,40,lifeColor);
+            DrawRectangle(ball.ballCords.x,ball.ballCords.y,ball.ballCords.width,ball.ballCords.height,RAYWHITE);
+            DrawRectangle(player.x,player.y,player.width,player.height,RAYWHITE);
+            if(pause){
+                DrawText("PAUSED",700,450,40,WHITE);
+            }  
+        }else{
+            DrawText("Game Over",580,450,80,RED);
+            DrawText("Score:",680,600,40,RAYWHITE);
+            DrawText(scoreStr,850,600,40,RAYWHITE);
         }
-        DrawText("Score:",1200,800,40,RAYWHITE);
-        DrawText(scoreStr,1350,800,40,RAYWHITE);
-        DrawText(lifesStr,50,800,40,lifeColor);
-        DrawRectangle(ball.ballCords.x,ball.ballCords.y,ball.ballCords.width,ball.ballCords.height,RAYWHITE);
-        DrawRectangle(player.x,player.y,player.width,player.height,RAYWHITE);
-        if(pause){
-            DrawText("PAUSED",700,450,40,WHITE);
-        }
+        
         EndDrawing();
     }
     CloseAudioDevice();
