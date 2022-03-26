@@ -5,6 +5,7 @@
 const int height = 900;
 const int width = 1500;
 const int PlayerSpeed = 15;
+int score  = 0;
 int ballXspeed = 10;
 int ballYspeed = 10;
 int lifes = 5;
@@ -16,7 +17,7 @@ Rectangle rec = {
 };
 Rectangle player = {
     .width = 150,
-    .height = 20,
+    .height = 30,
     .y = 850,
     .x = 400 - 150 / 2
 };
@@ -92,33 +93,21 @@ void pysic(Rectangle player, CompleteBall* ball,blockers blocks[5][10],int lifes
             if(blocks[y][x].state == true){
                 //collision of blocks (ball[y][x].spec) it's the rectangle
                 if(colide(ball->ballCords,blocks[y][x].spec) == cima || colide(ball->ballCords,blocks[y][x].spec) == baixo){
-                    
+                    score += 100;                    
                     blocks[y][x].state = false;
                     ball->spdY = -ball->spdY;
                 }
                 else if(colide(ball->ballCords,blocks[y][x].spec) == esquerda || colide(ball->ballCords,blocks[y][x].spec) == direita){
                     blocks[y][x].state = false;
                     ball->spdX = -ball->spdX;
+                    score += 100;
                 }
 
             }
         }
     }
 }
-int main(void){
-
-   
-    CompleteBall ball = {
-        .ballCords = ballspecs,
-        .spdX = ballXspeed,
-        .spdY = ballYspeed 
-    };
-    char outputStr[5];
-
-    bool pause = false;
-    InitWindow(width,height,"Atari Breakout");
-    SetTargetFPS(60);
-    
+void restart(){
     for(int y = 0; y < 5;y++){
        
         for(int x = 0; x < 10; x++){
@@ -157,13 +146,33 @@ int main(void){
         
         }
         rec.y += rec.height + 10;
-    }   
+    } 
+}
+int main(void){
+
+   
+    CompleteBall ball = {
+        .ballCords = ballspecs,
+        .spdX = ballXspeed,
+        .spdY = ballYspeed 
+    };
+    char lifesStr[5];
+    char scoreStr[10]; 
+    Color lifeColor = GREEN;
+    
+
+    bool pause = false;
+    InitWindow(width,height,"Atari Breakout");
+    SetTargetFPS(60);
+    
+    restart();
     
     while (!WindowShouldClose()){
 
 
         if(IsKeyPressed(KEY_P)){
-
+            
+            lifes--;
             if(pause)
                 pause = false;
             else
@@ -182,12 +191,15 @@ int main(void){
             pysic(player,&ball,blocks,lifes);
         }            
             
-
-        itoa(lifes,outputStr,10); 
+        if(lifes < 3)
+            lifeColor = RED;
+            
+        itoa(lifes,lifesStr,10); 
+        itoa(score,scoreStr,10);
         BeginDrawing();
 
         ClearBackground(BLACK);
-        DrawFPS(50,800);
+        
            
         for(int y = 0; y < 5;y++){
             for(int x = 0 ; x < 10; x++){
@@ -195,7 +207,9 @@ int main(void){
                     DrawRectangle(blocks[y][x].spec.x,blocks[y][x].spec.y,blocks[y][x].spec.width,blocks[y][x].spec.height,blocks[y][x].blockColor);
             }
         }
-        DrawText(outputStr,1400,800,40,RAYWHITE);
+        DrawText("Score:",1200,800,40,RAYWHITE);
+        DrawText(scoreStr,1350,800,40,RAYWHITE);
+        DrawText(lifesStr,50,800,40,lifeColor);
         DrawRectangle(ball.ballCords.x,ball.ballCords.y,ball.ballCords.width,ball.ballCords.height,RAYWHITE);
         DrawRectangle(player.x,player.y,player.width,player.height,RAYWHITE);
         if(pause){
