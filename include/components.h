@@ -19,3 +19,4 @@ typedef enum collison {
     direita,
     
 }typeCollision;
+

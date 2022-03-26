@@ -9,6 +9,8 @@ int score  = 0;
 int ballXspeed = 10;
 int ballYspeed = -10;
 int lifes = 5;
+unsigned char canceled = 0;
+int nivel = 1;
 Rectangle rec = {
     .width = 139,
     .height = 30,
@@ -34,6 +36,7 @@ Rectangle ballspecs = {
 
 
 blockers blocks[5][10];
+
 typeCollision colide(Rectangle rect1, Rectangle rect2){
 
     if(rect1.x + rect1.width >= rect2.x){
@@ -93,12 +96,14 @@ void pysic(Rectangle player, CompleteBall* ball,blockers blocks[5][10],int lifes
             if(blocks[y][x].state == true){
                 //collision of blocks (ball[y][x].spec) it's the rectangle
                 if(colide(ball->ballCords,blocks[y][x].spec) == cima || colide(ball->ballCords,blocks[y][x].spec) == baixo){
-                    score += 100;                    
+                    score += 100;
+                    canceled++;                    
                     blocks[y][x].state = false;
                     ball->spdY = -ball->spdY;
                 }
                 else if(colide(ball->ballCords,blocks[y][x].spec) == esquerda || colide(ball->ballCords,blocks[y][x].spec) == direita){
                     blocks[y][x].state = false;
+                    canceled++;
                     ball->spdX = -ball->spdX;
                     score += 100;
                 }
@@ -107,25 +112,45 @@ void pysic(Rectangle player, CompleteBall* ball,blockers blocks[5][10],int lifes
         }
     }
 }
-void restart(){
+void restartBall(CompleteBall* ball){
+    ball->ballCords.x = 750;
+    ball->ballCords.y = 750;
+    ball->spdX = 10;
+    ball->spdY = -10;
+}
+void restartBlocks(){
+
+  
+    lifes = 5;
+    canceled = 0;
+    rec.y = 30;
+    Color levels[6][5] = {
+        {RED,ORANGE,YELLOW,GREEN,BLUE},//rainbow
+        {BLUE,PINK,RAYWHITE,PINK,BLUE},//tran
+        {RAYWHITE,BLUE,BLUE,BLUE,RED},//russia
+        {GREEN,YELLOW,BLUE,YELLOW,GREEN},//brasil
+        {PINK,PINK,PURPLE,BLUE,BLUE},//bi
+        {BLUE,BLUE,BLUE,YELLOW,YELLOW}//ulkraine
+    };
+
     for(int y = 0; y < 5;y++){   
         for(int x = 0; x < 10; x++){
 
         switch (y){
             case 0:
-                blocks[y][x].blockColor = RED;
+                blocks[y][x].blockColor = levels[nivel][0];
                 break;
             case 1:
-                blocks[y][x].blockColor = ORANGE;
+                blocks[y][x].blockColor = levels[nivel][1];
                 break;
             case 2:
-                blocks[y][x].blockColor = YELLOW;
+                blocks[y][x].blockColor = levels[nivel][2];
                 break;
             case 3:
-                blocks[y][x].blockColor = GREEN;
+                blocks[y][x].blockColor = levels[nivel][3];
                 break;
             case 4:
-                blocks[y][x].blockColor = BLUE;  
+                blocks[y][x].blockColor = levels[nivel][4];  
                 break;            
             default:
                 break;
@@ -149,12 +174,13 @@ void restart(){
 }
 int main(void){
 
-   
+    
     CompleteBall ball = {
         .ballCords = ballspecs,
         .spdX = ballXspeed,
         .spdY = ballYspeed 
     };
+    
     char lifesStr[5];
     char scoreStr[10]; 
     Color lifeColor = GREEN;
@@ -165,7 +191,7 @@ int main(void){
     InitAudioDevice();
     SetTargetFPS(60);
     
-    restart();
+    restartBlocks(&ball.ballCords);
     
     while (!WindowShouldClose()){
 
@@ -186,9 +212,17 @@ int main(void){
             if(IsKeyDown(KEY_D))
                 if(player.x + player.width < width)
                     player.x += PlayerSpeed;
-           
+            if(lifes > 0){
+                if(canceled != 50)
+                    pysic(player,&ball,blocks,lifes);
+                else{
+                    nivel = GetRandomValue(0,5);    
+                    restartBlocks();
+                    restartBall(&ball);
+                }    
                     
-            pysic(player,&ball,blocks,lifes);
+            }           
+               
         }            
             
         if(lifes < 3)
