@@ -10,7 +10,7 @@ int ballXspeed = 10;
 int ballYspeed = -10;
 
 unsigned char canceled = 0;
-int nivel = 5;
+
 Rectangle rec = {
     .width = 139,
     .height = 30,
@@ -117,7 +117,7 @@ void pysic(Rectangle player, CompleteBall* ball,blockers blocks[5][10],int* life
     }
 }
 
-void restartBlocks(){
+void restartBlocks(int* nivel){
 
   
     
@@ -137,19 +137,19 @@ void restartBlocks(){
 
         switch (y){
             case 0:
-                blocks[y][x].blockColor = levels[nivel][0];
+                blocks[y][x].blockColor = levels[*nivel][0];
                 break;
             case 1:
-                blocks[y][x].blockColor = levels[nivel][1];
+                blocks[y][x].blockColor = levels[*nivel][1];
                 break;
             case 2:
-                blocks[y][x].blockColor = levels[nivel][2];
+                blocks[y][x].blockColor = levels[*nivel][2];
                 break;
             case 3:
-                blocks[y][x].blockColor = levels[nivel][3];
+                blocks[y][x].blockColor = levels[*nivel][3];
                 break;
             case 4:
-                blocks[y][x].blockColor = levels[nivel][4];  
+                blocks[y][x].blockColor = levels[*nivel][4];  
                 break;            
             default:
                 break;
@@ -174,6 +174,7 @@ void restartBlocks(){
 int main(void){
 
     int lifes = 5;
+    int nivel = GetRandomValue(0,5);
     CompleteBall ball = {
         .ballCords = ballspecs,
         .spdX = ballXspeed,
@@ -187,10 +188,11 @@ int main(void){
     InitWindow(width,height,"Atari Breakout");
     InitAudioDevice();
     Music music1 = LoadMusicStream("../resources/music1.mp3");
+    music1.looping = true;
     PlayMusicStream(music1);
     SetTargetFPS(60);
     
-    restartBlocks(&ball.ballCords);
+    restartBlocks(&nivel);
     
     while (!WindowShouldClose()){
 
@@ -219,7 +221,7 @@ int main(void){
                     pysic(player,&ball,blocks,&lifes);
                 else{
                     nivel = GetRandomValue(0,5);    
-                    restartBlocks();
+                    restartBlocks(&nivel);
                     restartBall(&ball);
                 }    
                     
