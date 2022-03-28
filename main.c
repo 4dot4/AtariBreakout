@@ -180,8 +180,7 @@ int main(void){
         .spdY = ballYspeed 
     };
     
-    char lifesStr[5];
-    char scoreStr[10]; 
+     
     Color lifeColor = GREEN;
     
 
@@ -227,8 +226,7 @@ int main(void){
         if(lifes < 3)
             lifeColor = RED;
 
-        itoa(lifes,lifesStr,10); 
-        itoa(score,scoreStr,10);
+        
         BeginDrawing();
 
         ClearBackground(BLACK);
@@ -240,9 +238,8 @@ int main(void){
                     DrawRectangle(blocks[y][x].spec.x,blocks[y][x].spec.y,blocks[y][x].spec.width,blocks[y][x].spec.height,blocks[y][x].blockColor);
                 }
             }
-            DrawText("Score:",1200,800,40,RAYWHITE);
-            DrawText(scoreStr,1350,800,40,RAYWHITE);
-            DrawText(lifesStr,50,800,40,lifeColor);
+            DrawText(TextFormat("Score: %d",score),1200,800,40,RAYWHITE);   
+            DrawText(TextFormat("%d",lifes),50,800,40,lifeColor);
             DrawRectangle(ball.ballCords.x,ball.ballCords.y,ball.ballCords.width,ball.ballCords.height,RAYWHITE);
             DrawRectangle(player.x,player.y,player.width,player.height,RAYWHITE);
             if(pause){
@@ -250,8 +247,8 @@ int main(void){
             }  
         }else{
             DrawText("Game Over",580,450,80,RED);
-            DrawText("Score:",680,600,40,RAYWHITE);
-            DrawText(scoreStr,830,600,40,RAYWHITE);
+            DrawText(TextFormat("Score: %d",score),680,600,40,RAYWHITE);
+            
         }
         
         EndDrawing();
