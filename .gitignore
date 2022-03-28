@@ -1,3 +1,4 @@
 *.exe/
 include/raylib.h/
 extras/
+.vscode/

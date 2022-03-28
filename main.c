@@ -1,7 +1,7 @@
 #include "raylib.h"
 #include "components.h"
 #include <stdio.h>
-#include <stdlib.h>
+
 const int height = 900;
 const int width = 1500;
 const int PlayerSpeed = 15;
