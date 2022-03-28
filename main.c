@@ -183,24 +183,28 @@ int main(void){
      
     Color lifeColor = GREEN;
     
-
     bool pause = false;
     InitWindow(width,height,"Atari Breakout");
     InitAudioDevice();
+    Music music1 = LoadMusicStream("../resources/music1.mp3");
+    PlayMusicStream(music1);
     SetTargetFPS(60);
     
     restartBlocks(&ball.ballCords);
     
     while (!WindowShouldClose()){
 
-
+        UpdateMusicStream(music1);
         if(IsKeyPressed(KEY_P)){
             
             
-            if(pause)
+            if(pause){
+                ResumeMusicStream(music1);
                 pause = false;
-            else
+            }else{
+                PauseMusicStream(music1);
                 pause = true;
+            }
         }
        
         if(!pause){
@@ -253,6 +257,7 @@ int main(void){
         
         EndDrawing();
     }
+    UnloadMusicStream(music1);
     CloseAudioDevice();
     CloseWindow();
 }
