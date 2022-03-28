@@ -233,7 +233,7 @@ int main(void){
 
         ClearBackground(BLACK);
         
-        if(lifes < 0){
+        if(lifes > 0){
           for(int y = 0; y < 5;y++){
             for(int x = 0 ; x < 10; x++){
                 if(blocks[y][x].state == true)
@@ -251,7 +251,7 @@ int main(void){
         }else{
             DrawText("Game Over",580,450,80,RED);
             DrawText("Score:",680,600,40,RAYWHITE);
-            DrawText(scoreStr,850,600,40,RAYWHITE);
+            DrawText(scoreStr,830,600,40,RAYWHITE);
         }
         
         EndDrawing();
