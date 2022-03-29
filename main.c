@@ -267,18 +267,21 @@ int main(void){
         else if(state == 4){ 
             
         }
-        if(IsKeyPressed(KEY_P)){
+        if(start >0){
+          if(IsKeyPressed(KEY_P)){
             
             
-            if(pause){
-                ResumeMusicStream(music1);
-                pause = false;
-            }else{
-                PauseMusicStream(music1);
-                pause = true;
-            }
+                if(pause){
+                        ResumeMusicStream(music1);
+                    pause = false;
+                }else{
+                    PauseMusicStream(music1);
+                    pause = true;
+                }
 
+            }  
         }
+        
         
         if(!pause){
             if(IsKeyDown(KEY_A))
@@ -312,7 +315,7 @@ int main(void){
         if(start == 0){
            if (state == 0)
             {
-                if ((framesCounter/15)%2) DrawRectangle(logoPositionX, logoPositionY, 16, 16, RAYWHITE);
+                if ((framesCounter/15)%2) DrawRectangle(logoPositionX, logoPositionY, 16, 16, WHITE);
             }
             else if (state == 1)
             {
