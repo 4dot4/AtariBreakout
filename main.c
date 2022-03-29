@@ -34,7 +34,7 @@ Rectangle ballspecs = {
 
 blockers blocks[5][10];
 void restartBall(CompleteBall* ball){
-    ball->ballCords.x = 750;
+    ball->ballCords.x = GetRandomValue(10,1480);
     ball->ballCords.y = 750;
     ball->spdX = 10;
     ball->spdY = -10;
