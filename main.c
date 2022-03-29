@@ -1,9 +1,11 @@
 #include "raylib.h"
 #include "components.h"
+
 #include <stdio.h>
 
 const int height = 900;
 const int width = 1500;
+
 const int PlayerSpeed = 15;
 int score  = 0;
 int ballXspeed = 10;
@@ -173,6 +175,8 @@ void restartBlocks(int* nivel){
 }
 int main(void){
 
+  
+    
     int lifes = 5;
     int nivel = GetRandomValue(0,5);
     CompleteBall ball = {
@@ -187,15 +191,17 @@ int main(void){
     bool pause = false;
     InitWindow(width,height,"Atari Breakout");
     InitAudioDevice();
+    SetTargetFPS(60); 
+    
     Music music1 = LoadMusicStream("../resources/music1.mp3");
     music1.looping = true;
     PlayMusicStream(music1);
-    SetTargetFPS(60);
     
+   
     restartBlocks(&nivel);
     
     while (!WindowShouldClose()){
-
+       
         UpdateMusicStream(music1);
         if(IsKeyPressed(KEY_P)){
             

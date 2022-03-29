@@ -20,3 +20,4 @@ typedef enum collison {
     
 }typeCollision;
 
+
