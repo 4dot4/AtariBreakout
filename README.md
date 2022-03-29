@@ -1,8 +1,8 @@
 
 
-## $(Atari Breakout)
+## Atari Breakout
 
-![$(Atari Breakout)](printscreens/printscreenBreakOut.png "$(Atari breakout)")
+![Atari Breakout](printscreens/printscreenBreakOut.png "$(Atari breakout)")
 
 ### Description
 
@@ -17,13 +17,9 @@ $(Your Game Description)
 ### Controls
 
 Keyboard:
- - $()
- - $(Game Control 02)
- - $(Game Control 03)
-
-### Screenshots
-
-_TODO: Show your game to the world, animated GIFs recommended!._
+ - a go left
+ - d go right
+ - p to pause
 
 
 
@@ -35,5 +31,5 @@ This game sources are licensed under an unmodified zlib/libpng license, which is
 
 $(Additional Licenses)
 
-*Copyright (c) $(2022) $(4dot4) ($(4dot4))*
+*Copyright (c) 2022 4dot4 (https://twitter.com/4d0t4)*
 
