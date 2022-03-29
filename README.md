@@ -6,20 +6,17 @@
 
 ### Description
 
-$(Your Game Description)
+classical Atari Breakout game
 
-### Features
 
- - $(Game Feature 01)
- - $(Game Feature 02)
- - $(Game Feature 03)
 
 ### Controls
 
 Keyboard:
- - a go left
- - d go right
- - p to pause
+ - A go left
+ - D go right
+ - P to pause
+ - ESC to exit
 
 
 
