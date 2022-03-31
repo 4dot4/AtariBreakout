@@ -8,7 +8,9 @@
 
 classical Atari Breakout game
 
+### Instalation
 
+First you have to downlaod Raylib (https://www.raylib.com/index.html)
 
 ### Controls
 
