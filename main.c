@@ -118,7 +118,12 @@ void pysic(Rectangle player, CompleteBall* ball,blockers blocks[5][10],int* life
         }
     }
 }
-
+void restartlife(int* lifes){ 
+    *lifes = 5;
+}
+void restartScore(int* score){
+    *score = 0;
+}
 void restartBlocks(int* nivel){
 
   
@@ -298,15 +303,24 @@ int main(void){
                         nivel = GetRandomValue(0,5);    
                         restartBlocks(&nivel);
                         restartBall(&ball);
+                        lifes++;
                     }    
                 }    
             }           
                
         }            
-            
+        if(lifes == 0){
+            if(IsKeyPressed(KEY_R)){
+                restartBlocks(&nivel);
+                restartlife(&lifes);
+                restartBall(&ball);
+                restartScore(&score);
+            }
+        }    
         if(lifes < 3)
             lifeColor = RED;
-
+        else if(lifes > 3)
+            lifeColor = GREEN;
         
         BeginDrawing();
 
@@ -365,7 +379,7 @@ int main(void){
         }else{
             DrawText("Game Over",580,450,80,RED);
             DrawText(TextFormat("Score: %d",score),680,600,40,RAYWHITE);
-            
+            DrawText("Press r to restart",640,700,30,RAYWHITE);
         }  
         }    
         
